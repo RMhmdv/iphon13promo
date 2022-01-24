@@ -5,7 +5,6 @@ const scrollFunc = () => {
   );
 
   const newArray = [...links, linkCharacteristics];
-  console.log(newArray);
 
   seamless.polyfill();
 

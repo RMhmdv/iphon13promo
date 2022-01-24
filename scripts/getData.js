@@ -1,21 +1,67 @@
 const getData = () => {
-  fetch('https://jsonplaceholder.typicode.com/todos/')
-    .then((response) => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Attention! Error!')
-      }
-    })
-    .then((data) => {
-        console.log(data);
-    })
-    .catch((error) => {
-      console.error(error.message);
-    })
-    .finally(() => {
-    console.log('finally');
-  })
+  const list = document.querySelector(".cross-sell__list");
+  const btn = document.querySelector('.cross-sell__add');
+
+  let stack = 4;
+  let count = 1;
+
+  const render = (data) => {
+    list.innerHTML = "";
+    
+    data.forEach((item) => {
+      list.insertAdjacentHTML(
+        "beforeend",
+        `
+      		<li>
+						<article class="cross-sell__item">
+							<img class="cross-sell__image" src="./${item.photo}" alt="${item.id}">
+							<h3 class="cross-sell__title">${item.name}</h3>
+							<p class="cross-sell__price">${item.price}₽</p>
+							<button type="button" class="button button_buy cross-sell__button">Купить</button>
+						</article>
+					</li>
+
+      `
+      );
+    });
+  };
+
+  const sliceArray = (data, index) => {
+    return data.slice(0,index)
+  }
+
+  const changeGata = (data) => {
+    const newStack = stack * count;
+
+    render(sliceArray(data, newStack));
+    if (data.length > newStack) {
+      count++;
+    } else {
+      btn.style.display = 'none';
+    }
+  };
+
+  const getGoodz = () => {
+    fetch("/cross-sell-dbase/dbase.json")
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Attention! Error!");
+        }
+      })
+      .then((data) => {
+        changeGata(data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  btn.addEventListener('click', getGoodz);
+
+  getGoodz();
+
 };
 
 getData();

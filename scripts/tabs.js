@@ -56,7 +56,6 @@ const tabsFunc = () => {
 
   changeContent(0);
 
-  // console.log(tabs);
 };
 
 tabsFunc();
